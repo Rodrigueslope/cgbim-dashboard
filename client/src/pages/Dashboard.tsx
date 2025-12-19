@@ -63,8 +63,8 @@ export default function Dashboard() {
         </div>
 
         {/* Cards de KPI */}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
-          <Card className="border-l-4 border-l-blue-600 shadow-elegant-md">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8 animate-fadeIn">
+          <Card className="border-l-4 border-l-blue-600 shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Taxa de Presença Geral</CardTitle>
               <Users className="h-5 w-5 text-blue-600" />
@@ -79,7 +79,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-indigo-600 shadow-elegant-md">
+          <Card className="border-l-4 border-l-indigo-600 shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Ações em Andamento</CardTitle>
               <Activity className="h-5 w-5 text-indigo-600" />
@@ -94,7 +94,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-green-600 shadow-elegant-md">
+          <Card className="border-l-4 border-l-green-600 shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Capacitações Realizadas</CardTitle>
               <CheckCircle2 className="h-5 w-5 text-green-600" />
@@ -109,7 +109,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-purple-600 shadow-elegant-md">
+          <Card className="border-l-4 border-l-purple-600 shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 hover:-translate-y-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Status da Estratégia</CardTitle>
               <TrendingUp className="h-5 w-5 text-purple-600" />
@@ -126,9 +126,9 @@ export default function Dashboard() {
         </div>
 
         {/* Gráficos de Frequência */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        <div className="grid gap-6 lg:grid-cols-2 mb-8 animate-fadeIn" style={{animationDelay: '0.2s'}}>
           {/* Gráfico de Barras - Presença por Secretaria */}
-          <Card className="shadow-elegant-md">
+          <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300">
             <CardHeader>
               <CardTitle>Presença por Secretaria</CardTitle>
               <CardDescription>Taxa de presença em reuniões por órgão</CardDescription>
@@ -173,7 +173,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Gráfico de Linha - Evolução Temporal */}
-          <Card className="shadow-elegant-md">
+          <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300">
             <CardHeader>
               <CardTitle>Evolução da Taxa de Presença</CardTitle>
               <CardDescription>Tendência ao longo das reuniões</CardDescription>
@@ -220,7 +220,7 @@ export default function Dashboard() {
         </div>
 
         {/* Gráfico de Pizza - Presentes vs Ausentes */}
-        <Card className="shadow-elegant-md">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 animate-fadeIn" style={{animationDelay: '0.4s'}}>
           <CardHeader>
             <CardTitle>Distribuição de Presença - Última Reunião</CardTitle>
             <CardDescription>Comparativo entre presentes e ausentes</CardDescription>

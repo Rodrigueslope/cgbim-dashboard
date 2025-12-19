@@ -73,4 +73,16 @@
 ## Finalização
 - [x] Revisar todas as funcionalidades
 - [x] Verificar integração completa
-- [ ] Criar checkpoint final
+- [x] Criar checkpoint final
+
+## Melhorias Visuais e Acesso Público
+- [x] Buscar e adicionar logo do Governo da Bahia
+- [x] Adicionar logo no header/sidebar do sistema
+- [x] Melhorar efeitos visuais no Dashboard (animações, transições)
+- [x] Melhorar efeitos visuais na página de Reuniões
+- [x] Melhorar efeitos visuais na página de Ações
+- [x] Melhorar efeitos visuais na página de Capacitações
+- [x] Melhorar efeitos visuais na página de Conformidade
+- [x] Remover autenticação obrigatória do DashboardLayout
+- [x] Tornar sistema acessível publicamente sem login
+- [x] Criar checkpoint final com melhorias

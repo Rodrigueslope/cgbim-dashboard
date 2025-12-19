@@ -87,9 +87,9 @@ export default function Capacitacoes() {
         </div>
 
         {/* Gráficos */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        <div className="grid gap-6 lg:grid-cols-2 mb-8 animate-fadeIn">
           {/* Gráfico de Participantes por Capacitação */}
-          <Card className="shadow-elegant-md">
+          <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300">
             <CardHeader>
               <CardTitle>Participantes por Capacitação</CardTitle>
               <CardDescription>Comparativo entre esperados, confirmados e presentes</CardDescription>
@@ -116,7 +116,7 @@ export default function Capacitacoes() {
           </Card>
 
           {/* Gráfico de Evolução */}
-          <Card className="shadow-elegant-md">
+          <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300">
             <CardHeader>
               <CardTitle>Evolução de Pessoas Capacitadas</CardTitle>
               <CardDescription>Total acumulado ao longo do tempo</CardDescription>
@@ -160,7 +160,7 @@ export default function Capacitacoes() {
         </div>
 
         {/* Próximas Capacitações Agendadas */}
-        <Card className="shadow-elegant-md mb-8">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 mb-8 animate-fadeIn" style={{animationDelay: '0.2s'}}>
           <CardHeader>
             <CardTitle>Próximas Capacitações Agendadas</CardTitle>
             <CardDescription>Treinamentos programados para os próximos meses</CardDescription>
@@ -228,7 +228,7 @@ export default function Capacitacoes() {
         </Card>
 
         {/* Todas as Capacitações */}
-        <Card className="shadow-elegant-md">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 animate-fadeIn" style={{animationDelay: '0.4s'}}>
           <CardHeader>
             <CardTitle>Histórico Completo</CardTitle>
             <CardDescription>Todas as capacitações realizadas e agendadas</CardDescription>

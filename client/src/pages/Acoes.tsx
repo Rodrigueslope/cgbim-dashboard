@@ -100,7 +100,7 @@ export default function Acoes() {
         </div>
 
         {/* Gráfico de Status */}
-        <Card className="shadow-elegant-md mb-8">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 mb-8 animate-fadeIn">
           <CardHeader>
             <CardTitle>Status das Ações</CardTitle>
             <CardDescription>Distribuição das ações por status atual</CardDescription>
@@ -137,7 +137,7 @@ export default function Acoes() {
         </Card>
 
         {/* Tabela de Ações */}
-        <Card className="shadow-elegant-md">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 animate-fadeIn" style={{animationDelay: '0.2s'}}>
           <CardHeader>
             <CardTitle>Todas as Ações</CardTitle>
             <CardDescription>Lista completa de ações com detalhes e responsáveis</CardDescription>

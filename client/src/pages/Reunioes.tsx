@@ -32,9 +32,9 @@ export default function Reunioes() {
           </p>
         </div>
 
-        <div className="grid gap-6">
+        <div className="grid gap-6 animate-fadeIn">
           {reunioes?.map((reuniao) => (
-            <Card key={reuniao.id} className="shadow-elegant-md hover:shadow-elegant-lg transition-shadow">
+            <Card key={reuniao.id} className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 hover:scale-[1.01] animate-fadeIn">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex-1">

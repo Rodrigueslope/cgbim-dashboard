@@ -96,7 +96,7 @@ export default function Conformidade() {
         </div>
 
         {/* Progresso Geral */}
-        <Card className="shadow-elegant-md mb-8 border-l-4 border-l-primary">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 mb-8 border-l-4 border-l-primary animate-fadeIn">
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span>Progresso Geral da Estratégia BIM-BA</span>
@@ -110,9 +110,9 @@ export default function Conformidade() {
         </Card>
 
         {/* Cards por Categoria */}
-        <div className="grid gap-6 lg:grid-cols-2 mb-8">
+        <div className="grid gap-6 lg:grid-cols-2 mb-8 animate-fadeIn" style={{animationDelay: '0.2s'}}>
           {conformidadePorCategoria.map((cat) => (
-            <Card key={cat.categoria} className="shadow-elegant-md">
+            <Card key={cat.categoria} className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 hover:scale-[1.01]">
               <CardHeader>
                 <CardTitle className="flex items-center gap-3">
                   <div className="p-2 bg-primary/10 rounded-lg text-primary">
@@ -157,7 +157,7 @@ export default function Conformidade() {
         </div>
 
         {/* Checklist de Requisitos do Decreto */}
-        <Card className="shadow-elegant-md">
+        <Card className="shadow-elegant-md hover:shadow-elegant-lg transition-all duration-300 animate-fadeIn" style={{animationDelay: '0.4s'}}>
           <CardHeader>
             <CardTitle>Checklist de Requisitos do Decreto</CardTitle>
             <CardDescription>Status de implementação dos artigos do Decreto BIM-BA</CardDescription>
