@@ -1,7 +1,7 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
+import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import * as db from "./db";
 
@@ -32,15 +32,15 @@ export const appRouter = router({
 
   // ===== Reuniões =====
   reunioes: router({
-    list: protectedProcedure.query(async () => {
+    list: publicProcedure.query(async () => {
       return await db.getAllReunioes();
     }),
-    getById: protectedProcedure
+    getById: publicProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         return await db.getReuniaoById(input.id);
       }),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         numero: z.number(),
         data: z.string(),
@@ -58,7 +58,7 @@ export const appRouter = router({
         });
         return { id };
       }),
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         id: z.number(),
         ata: z.string().optional(),
@@ -75,12 +75,12 @@ export const appRouter = router({
 
   // ===== Presenças =====
   presencas: router({
-    listByReuniao: protectedProcedure
+    listByReuniao: publicProcedure
       .input(z.object({ reuniaoId: z.number() }))
       .query(async ({ input }) => {
         return await db.getPresencasByReuniaoId(input.reuniaoId);
       }),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         reuniaoId: z.number(),
         secretariaId: z.number(),
@@ -92,7 +92,7 @@ export const appRouter = router({
         await db.createPresenca(input);
         return { success: true };
       }),
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         id: z.number(),
         presente: z.boolean().optional(),
@@ -107,15 +107,15 @@ export const appRouter = router({
 
   // ===== Ações =====
   acoes: router({
-    list: protectedProcedure.query(async () => {
+    list: publicProcedure.query(async () => {
       return await db.getAllAcoes();
     }),
-    getById: protectedProcedure
+    getById: publicProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         return await db.getAcaoById(input.id);
       }),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         titulo: z.string(),
         descricao: z.string().optional(),
@@ -137,7 +137,7 @@ export const appRouter = router({
         });
         return { id };
       }),
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         id: z.number(),
         titulo: z.string().optional(),
@@ -161,7 +161,7 @@ export const appRouter = router({
         await db.updateAcao(id, data);
         return { success: true };
       }),
-    delete: protectedProcedure
+    delete: publicProcedure
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
         await db.deleteAcao(input.id);
@@ -171,15 +171,15 @@ export const appRouter = router({
 
   // ===== Capacitações =====
   capacitacoes: router({
-    list: protectedProcedure.query(async () => {
+    list: publicProcedure.query(async () => {
       return await db.getAllCapacitacoes();
     }),
-    getById: protectedProcedure
+    getById: publicProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         return await db.getCapacitacaoById(input.id);
       }),
-    create: protectedProcedure
+    create: publicProcedure
       .input(z.object({
         titulo: z.string(),
         descricao: z.string().optional(),
@@ -200,7 +200,7 @@ export const appRouter = router({
         });
         return { id };
       }),
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         id: z.number(),
         titulo: z.string().optional(),
@@ -224,7 +224,7 @@ export const appRouter = router({
         await db.updateCapacitacao(id, updateData);
         return { success: true };
       }),
-    delete: protectedProcedure
+    delete: publicProcedure
       .input(z.object({ id: z.number() }))
       .mutation(async ({ input }) => {
         await db.deleteCapacitacao(input.id);
@@ -234,15 +234,15 @@ export const appRouter = router({
 
   // ===== Conformidade Regulatória =====
   conformidade: router({
-    list: protectedProcedure.query(async () => {
+    list: publicProcedure.query(async () => {
       return await db.getAllConformidade();
     }),
-    getById: protectedProcedure
+    getById: publicProcedure
       .input(z.object({ id: z.number() }))
       .query(async ({ input }) => {
         return await db.getConformidadeById(input.id);
       }),
-    update: protectedProcedure
+    update: publicProcedure
       .input(z.object({
         id: z.number(),
         percentualConclusao: z.number().optional(),
@@ -266,10 +266,10 @@ export const appRouter = router({
 
   // ===== Dashboard e KPIs =====
   dashboard: router({
-    kpis: protectedProcedure.query(async () => {
+    kpis: publicProcedure.query(async () => {
       return await db.getKPIs();
     }),
-    frequencia: protectedProcedure.query(async () => {
+    frequencia: publicProcedure.query(async () => {
       return await db.getFrequenciaData();
     }),
   }),

@@ -13,17 +13,18 @@ import {
 } from "@/components/ui/sidebar";
 
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, PanelLeft, Calendar, Target, GraduationCap, FileCheck } from "lucide-react";
+import { LayoutDashboard, PanelLeft, Calendar, Target, GraduationCap, FileCheck, Settings } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/" },
-  { icon: Calendar, label: "Reuni\u00f5es", path: "/reunioes" },
-  { icon: Target, label: "A\u00e7\u00f5es", path: "/acoes" },
-  { icon: GraduationCap, label: "Capacita\u00e7\u00f5es", path: "/capacitacoes" },
+  { icon: Calendar, label: "Reuniões", path: "/reunioes" },
+  { icon: Target, label: "Ações", path: "/acoes" },
+  { icon: GraduationCap, label: "Capacitações", path: "/capacitacoes" },
   { icon: FileCheck, label: "Conformidade", path: "/conformidade" },
+  { icon: Settings, label: "Administração", path: "/administracao" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";

@@ -10,6 +10,7 @@ import Reunioes from "./pages/Reunioes";
 import Acoes from "./pages/Acoes";
 import Capacitacoes from "./pages/Capacitacoes";
 import Conformidade from "./pages/Conformidade";
+import Administracao from "./pages/Administracao";
 
 function Router() {
   return (
@@ -37,6 +38,11 @@ function Router() {
       <Route path="/conformidade" component={() => (
         <DashboardLayout>
           <Conformidade />
+        </DashboardLayout>
+      )} />
+      <Route path="/administracao" component={() => (
+        <DashboardLayout>
+          <Administracao />
         </DashboardLayout>
       )} />
       <Route path="/404" component={NotFound} />

@@ -86,3 +86,22 @@
 - [x] Remover autenticação obrigatória do DashboardLayout
 - [x] Tornar sistema acessível publicamente sem login
 - [x] Criar checkpoint final com melhorias
+
+## Atualização de Dados
+- [ ] Atualizar status das ações no banco (1 ação em andamento)
+- [ ] Atualizar capacitações no banco (0 capacitações realizadas)
+- [ ] Criar checkpoint com dados atualizados
+
+## Interface Administrativa
+- [x] Criar rotas tRPC para criar/editar/excluir reuniões
+- [x] Criar rotas tRPC para criar/editar/excluir ações
+- [x] Criar rotas tRPC para criar/editar/excluir capacitações
+- [x] Criar rotas tRPC para registrar/editar presenças
+- [x] Criar página de Administração no menu
+- [x] Implementar formulário de cadastro de reuniões
+- [x] Implementar formulário de cadastro de ações
+- [x] Implementar formulário de cadastro de capacitações
+- [x] Adicionar botões de edição e exclusão nas listagens
+- [x] Mudar todas as rotas para públicas (sem autenticação)
+- [x] Testar todas as funcionalidades CRUD (15 testes passando)
+- [x] Criar checkpoint final com interface administrativa
