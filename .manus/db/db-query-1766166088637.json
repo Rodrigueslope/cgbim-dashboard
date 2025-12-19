@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, totalEsperado, totalPresentes, taxaPresenca, quorumAtingido, ata, createdAt, updatedAt) VALUES (1, '2024-11-15', 'ordinaria', 'Sede SEINFRA - Salvador/BA', 'presencial', 'Primeira reunião ordinária do CGBIM-BAHIA. Apresentação do comitê, discussão dos objetivos do Decreto BIM-BA e planejamento das ações iniciais.', 11, 11, '100.00', true, 'Reunião realizada com presença de todas as 11 secretarias (titulares). Quórum completo atingido.', NOW(), NOW());",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 23YLLHbQBnPEidx.14d6f5fc1177 --database P7MB4QepvFi5RzrqeNuCag --execute INSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, totalEsperado, totalPresentes, taxaPresenca, quorumAtingido, ata, createdAt, updatedAt) VALUES (1, '2024-11-15', 'ordinaria', 'Sede SEINFRA - Salvador/BA', 'presencial', 'Primeira reunião ordinária do CGBIM-BAHIA. Apresentação do comitê, discussão dos objetivos do Decreto BIM-BA e planejamento das ações iniciais.', 11, 11, '100.00', true, 'Reunião realizada com presença de todas as 11 secretarias (titulares). Quórum completo atingido.', NOW(), NOW());",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 81
+}

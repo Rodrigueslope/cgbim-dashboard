@@ -105,3 +105,13 @@
 - [x] Mudar todas as rotas para públicas (sem autenticação)
 - [x] Testar todas as funcionalidades CRUD (15 testes passando)
 - [x] Criar checkpoint final com interface administrativa
+
+## Ajuste de Dados das Reuniões
+- [x] Revisar ata de presença da reunião de novembro (100% de presença - 11/11 secretárias)
+- [x] Limpar dados antigos de reuniões do banco
+- [x] Criar 1ª reunião (novembro/2024) com dados da ata
+- [x] Registrar presenças da 1ª reunião conforme ata (11/11 titulares presentes)
+- [x] Criar 2ª reunião (19/12/2024 - hoje)
+- [x] Criar 3ª reunião (janeiro/2025 - agendada)
+- [x] Verificar atualização dos KPIs (33.3% taxa geral, gráficos atualizados)
+- [x] Criar checkpoint com dados corretos

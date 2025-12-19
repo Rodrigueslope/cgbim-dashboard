@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, totalEsperado, totalPresentes, taxaPresenca, quorumAtingido, ata, createdAt, updatedAt) VALUES (3, '2025-01-30', 'ordinaria', 'A definir', 'hibrida', 'Terceira reunião ordinária do CGBIM-BAHIA. Planejamento estratégico para o primeiro semestre de 2025.', 11, 0, '0.00', false, 'Reunião agendada.', NOW(), NOW());",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 23YLLHbQBnPEidx.14d6f5fc1177 --database P7MB4QepvFi5RzrqeNuCag --execute INSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, totalEsperado, totalPresentes, taxaPresenca, quorumAtingido, ata, createdAt, updatedAt) VALUES (3, '2025-01-30', 'ordinaria', 'A definir', 'hibrida', 'Terceira reunião ordinária do CGBIM-BAHIA. Planejamento estratégico para o primeiro semestre de 2025.', 11, 0, '0.00', false, 'Reunião agendada.', NOW(), NOW());",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 64
+}
