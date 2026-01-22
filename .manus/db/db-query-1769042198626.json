@@ -1,0 +1,9 @@
+{
+  "query": "-- Deletar todas as presenças primeiro\nDELETE FROM presencas;\n\n-- Deletar todas as reuniões\nDELETE FROM reunioes;\n\n-- Inserir apenas as 3 reuniões corretas\nINSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, quorumAtingido, totalPresentes, totalEsperado, taxaPresenca) VALUES\n(1, '2024-11-14', 'ordinaria', 'Sala de Reuniões - SEINFRA', 'presencial', 'Apresentação do Decreto BIM-BA e definição das diretrizes iniciais do Comitê Gestor', TRUE, 11, 11, '100.00'),\n(2, '2024-12-19', 'ordinaria', 'A definir', 'presencial', 'Acompanhamento das ações e definição de próximos passos', FALSE, 0, 11, '0.00'),\n(3, '2025-01-29', 'ordinaria', 'A definir', 'presencial', 'Reunião agendada para janeiro de 2025', FALSE, 0, 11, '0.00');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 23YLLHbQBnPEidx.14d6f5fc1177 --database P7MB4QepvFi5RzrqeNuCag --execute -- Deletar todas as presenças primeiro\nDELETE FROM presencas;\n\n-- Deletar todas as reuniões\nDELETE FROM reunioes;\n\n-- Inserir apenas as 3 reuniões corretas\nINSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, quorumAtingido, totalPresentes, totalEsperado, taxaPresenca) VALUES\n(1, '2024-11-14', 'ordinaria', 'Sala de Reuniões - SEINFRA', 'presencial', 'Apresentação do Decreto BIM-BA e definição das diretrizes iniciais do Comitê Gestor', TRUE, 11, 11, '100.00'),\n(2, '2024-12-19', 'ordinaria', 'A definir', 'presencial', 'Acompanhamento das ações e definição de próximos passos', FALSE, 0, 11, '0.00'),\n(3, '2025-01-29', 'ordinaria', 'A definir', 'presencial', 'Reunião agendada para janeiro de 2025', FALSE, 0, 11, '0.00');",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 153
+}

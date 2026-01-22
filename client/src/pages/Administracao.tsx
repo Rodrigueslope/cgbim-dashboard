@@ -51,6 +51,7 @@ export default function Administracao() {
 
   // Queries
   const { data: secretarias } = trpc.secretarias.list.useQuery();
+  const { data: reunioes } = trpc.reunioes.list.useQuery();
   const { data: acoes } = trpc.acoes.list.useQuery();
   const { data: capacitacoes } = trpc.capacitacoes.list.useQuery();
 
@@ -71,6 +72,29 @@ export default function Administracao() {
     },
     onError: (error) => {
       toast.error(`Erro ao criar reunião: ${error.message}`);
+    },
+  });
+
+  const atualizarReuniao = trpc.reunioes.update.useMutation({
+    onSuccess: () => {
+      toast.success("Reunião atualizada com sucesso!");
+      utils.reunioes.list.invalidate();
+      utils.dashboard.kpis.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao atualizar reunião: ${error.message}`);
+    },
+  });
+
+  const excluirReuniao = trpc.reunioes.delete.useMutation({
+    onSuccess: () => {
+      toast.success("Reunião excluída com sucesso!");
+      utils.reunioes.list.invalidate();
+      utils.dashboard.kpis.invalidate();
+      utils.dashboard.frequencia.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao excluir reunião: ${error.message}`);
     },
   });
 
@@ -307,6 +331,82 @@ export default function Administracao() {
                   {criarReuniao.isPending ? "Salvando..." : "Criar Reunião"}
                 </Button>
               </form>
+            </CardContent>
+          </Card>
+
+          {/* Lista de Reuniões Existentes */}
+          <Card className="shadow-elegant-md">
+            <CardHeader>
+              <CardTitle>Reuniões Cadastradas</CardTitle>
+              <CardDescription>Gerencie as reuniões existentes</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {reunioes?.map((reuniao) => (
+                  <div key={reuniao.id} className="flex items-start justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                    <div className="flex-1">
+                      <h4 className="font-medium">Reunião #{reuniao.numero} - {reuniao.tipo === "ordinaria" ? "Ordinária" : "Extraordinária"}</h4>
+                      <div className="flex flex-col gap-1 mt-2 text-sm text-muted-foreground">
+                        <span>📅 {new Date(reuniao.data).toLocaleDateString('pt-BR')}</span>
+                        {reuniao.local && <span>📍 {reuniao.local}</span>}
+                        <span>📊 {reuniao.modalidade}</span>
+                        {reuniao.pauta && <span className="mt-1"><strong>Pauta:</strong> {reuniao.pauta}</span>}
+                        <span className="mt-1">
+                          {reuniao.quorumAtingido ? "✅ Quórum atingido" : "❌ Sem quórum"} - 
+                          {reuniao.totalPresentes}/{reuniao.totalEsperado} presentes ({reuniao.taxaPresenca}%)
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          // Preencher formulário com dados da reunião para edição
+                          setNovaReuniao({
+                            numero: reuniao.numero,
+                            data: new Date(reuniao.data).toISOString().split('T')[0],
+                            tipo: reuniao.tipo,
+                            local: reuniao.local || "",
+                            modalidade: reuniao.modalidade,
+                            pauta: reuniao.pauta || "",
+                          });
+                          // Atualizar em vez de criar
+                          const form = document.querySelector('form');
+                          if (form) {
+                            form.onsubmit = (e) => {
+                              e.preventDefault();
+                              atualizarReuniao.mutate({
+                                id: reuniao.id,
+                                ...novaReuniao,
+                              });
+                            };
+                          }
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        onClick={() => {
+                          if (confirm(`Deseja realmente excluir a Reunião #${reuniao.numero}? Todas as presenças registradas serão perdidas.`)) {
+                            excluirReuniao.mutate({ id: reuniao.id });
+                          }
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+                {(!reunioes || reunioes.length === 0) && (
+                  <p className="text-center text-muted-foreground py-8">
+                    Nenhuma reunião cadastrada ainda
+                  </p>
+                )}
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

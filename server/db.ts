@@ -145,6 +145,15 @@ export async function updateReuniao(id: number, data: Partial<typeof reunioes.$i
   await db.update(reunioes).set(data).where(eq(reunioes.id, id));
 }
 
+export async function deleteReuniao(id: number): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Deletar presenças associadas primeiro
+  await db.delete(presencas).where(eq(presencas.reuniaoId, id));
+  // Deletar a reunião
+  await db.delete(reunioes).where(eq(reunioes.id, id));
+}
+
 // ===== Presenças =====
 export async function getPresencasByReuniaoId(reuniaoId: number): Promise<Presenca[]> {
   const db = await getDb();

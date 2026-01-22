@@ -61,14 +61,28 @@ export const appRouter = router({
     update: publicProcedure
       .input(z.object({
         id: z.number(),
+        numero: z.number().optional(),
+        data: z.string().optional(),
+        tipo: z.enum(["ordinaria", "extraordinaria"]).optional(),
+        local: z.string().optional(),
+        modalidade: z.enum(["presencial", "virtual", "hibrida"]).optional(),
+        pauta: z.string().optional(),
         ata: z.string().optional(),
         quorumAtingido: z.boolean().optional(),
         totalPresentes: z.number().optional(),
         taxaPresenca: z.string().optional(),
       }))
       .mutation(async ({ input }) => {
-        const { id, ...data } = input;
-        await db.updateReuniao(id, data);
+        const { id, data, ...rest } = input;
+        const updateData: any = { ...rest };
+        if (data) updateData.data = new Date(data);
+        await db.updateReuniao(id, updateData);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await db.deleteReuniao(input.id);
         return { success: true };
       }),
   }),

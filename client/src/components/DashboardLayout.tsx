@@ -13,9 +13,11 @@ import {
 } from "@/components/ui/sidebar";
 
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, PanelLeft, Calendar, Target, GraduationCap, FileCheck, Settings } from "lucide-react";
+import { useAuthSimple } from "@/hooks/useAuthSimple";
+import { LayoutDashboard, PanelLeft, Calendar, Target, GraduationCap, FileCheck, Settings, LogOut } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
 
 
 const menuItems = [
@@ -26,6 +28,22 @@ const menuItems = [
   { icon: FileCheck, label: "Conformidade", path: "/conformidade" },
   { icon: Settings, label: "Administração", path: "/administracao" },
 ];
+
+function LogoutButton() {
+  const { logout } = useAuthSimple();
+  
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={logout}
+      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+      title="Sair"
+    >
+      <LogOut className="h-4 w-4" />
+    </Button>
+  );
+}
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
 const DEFAULT_WIDTH = 280;
@@ -133,12 +151,13 @@ function DashboardLayoutContent({
                 <PanelLeft className="h-4 w-4 text-muted-foreground" />
               </button>
               {!isCollapsed ? (
-                <div className="flex items-center gap-3 min-w-0 flex-1">
+                <div className="flex items-center gap-3 min-w-0 flex-1 justify-between">
                   <img 
                     src="/logo-governo-bahia.png" 
                     alt="Governo da Bahia" 
                     className="h-10 w-auto object-contain"
                   />
+                  <LogoutButton />
                 </div>
               ) : null}
             </div>

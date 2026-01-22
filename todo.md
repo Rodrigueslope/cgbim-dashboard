@@ -128,3 +128,32 @@
 - [x] Criar função registerPresencas no db.ts
 - [x] Testar edição de presença e verificar atualização dos KPIs (19 testes passando)
 - [x] Criar checkpoint com interface de edição funcional
+
+## Edição e Exclusão de Reuniões
+- [x] Adicionar listagem de reuniões existentes na aba de Reuniões
+- [x] Adicionar botão de edição para cada reunião
+- [x] Criar formulário de edição de reunião (preencher com dados existentes)
+- [x] Adicionar botão de exclusão para cada reunião
+- [x] Implementar confirmação antes de excluir
+- [x] Atualizar KPIs após edição/exclusão
+- [x] Criar rota tRPC reunioes.delete
+- [x] Criar rota tRPC reunioes.update expandida
+- [x] Criar função deleteReuniao no db.ts
+
+## Sistema de Autenticação com Senha
+- [x] Criar página de Login com campo de senha
+- [x] Criar sistema de sessão simples (localStorage com expiração de 24h)
+- [x] Proteger todas as rotas do sistema com verificação de autenticação (ProtectedRoute)
+- [x] Adicionar botão de logout no header do sidebar
+- [x] Definir senha de acesso para a RBIM (RBIM2025)
+- [x] Redirecionar para login se não autenticado
+- [x] Criar hook useAuthSimple para gerenciar autenticação
+- [x] Testar fluxo completo de login/logout (tela de login funcional, senha RBIM2025)
+
+## Correção de Dados
+- [x] Limpar reuniões incorretas do banco
+- [x] Manter apenas as 3 reuniões corretas (Nov/2024, 19 Dez/2024, Jan/2025)
+- [x] Verificar e corrigir pautas das reuniões
+- [x] Registrar presenças da 1ª reunião (11/11 presentes)
+- [x] Criar testes para CRUD de reuniões (24 testes passando)
+- [x] Criar checkpoint final
