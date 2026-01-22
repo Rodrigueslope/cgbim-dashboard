@@ -103,6 +103,19 @@ export const appRouter = router({
         await db.updatePresenca(id, data);
         return { success: true };
       }),
+    register: publicProcedure
+      .input(z.object({
+        reuniaoId: z.number(),
+        presencas: z.array(z.object({
+          secretariaId: z.number(),
+          presente: z.boolean(),
+          tipoParticipante: z.enum(["titular", "suplente"]),
+        })),
+      }))
+      .mutation(async ({ input }) => {
+        await db.registerPresencas(input.reuniaoId, input.presencas);
+        return { success: true };
+      }),
   }),
 
   // ===== Ações =====

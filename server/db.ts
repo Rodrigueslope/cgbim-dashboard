@@ -164,6 +164,42 @@ export async function updatePresenca(id: number, data: Partial<typeof presencas.
   await db.update(presencas).set(data).where(eq(presencas.id, id));
 }
 
+export async function registerPresencas(
+  reuniaoId: number,
+  presencasData: Array<{ secretariaId: number; presente: boolean; tipoParticipante: 'titular' | 'suplente' }>
+): Promise<void> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  // Deletar presenças existentes desta reunião
+  await db.delete(presencas).where(eq(presencas.reuniaoId, reuniaoId));
+  
+  // Inserir novas presenças
+  if (presencasData.length > 0) {
+    await db.insert(presencas).values(
+      presencasData.map((p) => ({
+        reuniaoId,
+        secretariaId: p.secretariaId,
+        presente: p.presente,
+        tipoParticipante: p.tipoParticipante,
+      }))
+    );
+  }
+  
+  // Recalcular estatísticas da reunião
+  const totalEsperado = 11; // 11 secretarias
+  const totalPresentes = presencasData.filter((p) => p.presente).length;
+  const taxaPresenca = ((totalPresentes / totalEsperado) * 100).toFixed(2);
+  const quorumAtingido = totalPresentes >= Math.ceil(totalEsperado / 2);
+  
+  await db.update(reunioes).set({
+    totalEsperado,
+    totalPresentes,
+    taxaPresenca,
+    quorumAtingido,
+  }).where(eq(reunioes.id, reuniaoId));
+}
+
 // ===== Ações =====
 export async function getAllAcoes(): Promise<Acao[]> {
   const db = await getDb();

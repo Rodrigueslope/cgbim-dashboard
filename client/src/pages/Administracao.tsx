@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Plus, Save, Trash2, Edit } from "lucide-react";
 
 export default function Administracao() {
@@ -203,8 +203,9 @@ export default function Administracao() {
       </div>
 
       <Tabs defaultValue="reunioes" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="reunioes">Reuniões</TabsTrigger>
+          <TabsTrigger value="presenca">Registro de Presença</TabsTrigger>
           <TabsTrigger value="acoes">Ações</TabsTrigger>
           <TabsTrigger value="capacitacoes">Capacitações</TabsTrigger>
         </TabsList>
@@ -671,7 +672,187 @@ export default function Administracao() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* Tab de Registro de Presença */}
+        <TabsContent value="presenca" className="space-y-6">
+          <RegistroPresenca />
+        </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+// Componente de Registro de Presença
+function RegistroPresenca() {
+  const utils = trpc.useUtils();
+  const [reuniaoSelecionada, setReuniaoSelecionada] = useState<number | null>(null);
+  const [presencas, setPresencas] = useState<Record<number, { presente: boolean; tipo: 'titular' | 'suplente' }>>({});
+  
+  const { data: reunioes } = trpc.reunioes.list.useQuery();
+  const { data: secretarias } = trpc.secretarias.list.useQuery();
+  const { data: presencasExistentes } = trpc.presencas.listByReuniao.useQuery(
+    { reuniaoId: reuniaoSelecionada! },
+    { enabled: !!reuniaoSelecionada }
+  );
+  
+  const registrarPresenca = trpc.presencas.register.useMutation({
+    onSuccess: () => {
+      toast.success("Presenças registradas com sucesso!");
+      utils.presencas.listByReuniao.invalidate();
+      utils.reunioes.list.invalidate();
+      utils.dashboard.kpis.invalidate();
+      utils.dashboard.frequencia.invalidate();
+    },
+    onError: (error) => {
+      toast.error(`Erro ao registrar presenças: ${error.message}`);
+    },
+  });
+  
+  // Carregar presenças existentes quando selecionar reunião
+  useEffect(() => {
+    if (presencasExistentes && secretarias) {
+      const novasPresencas: Record<number, { presente: boolean; tipo: 'titular' | 'suplente' }> = {};
+      secretarias.forEach((sec) => {
+        const presencaExistente = presencasExistentes.find((p) => p.secretariaId === sec.id);
+        novasPresencas[sec.id] = {
+          presente: presencaExistente?.presente || false,
+          tipo: presencaExistente?.tipoParticipante || 'titular',
+        };
+      });
+      setPresencas(novasPresencas);
+    }
+  }, [presencasExistentes, secretarias]);
+  
+  const handleSalvarPresencas = () => {
+    if (!reuniaoSelecionada) {
+      toast.error("Selecione uma reunião primeiro");
+      return;
+    }
+    
+    const presencasArray = Object.entries(presencas).map(([secId, data]) => ({
+      secretariaId: parseInt(secId),
+      presente: data.presente,
+      tipoParticipante: data.tipo,
+    }));
+    
+    registrarPresenca.mutate({
+      reuniaoId: reuniaoSelecionada,
+      presencas: presencasArray,
+    });
+  };
+  
+  const togglePresenca = (secId: number) => {
+    setPresencas((prev) => ({
+      ...prev,
+      [secId]: {
+        ...prev[secId],
+        presente: !prev[secId]?.presente,
+      },
+    }));
+  };
+  
+  const setTipo = (secId: number, tipo: 'titular' | 'suplente') => {
+    setPresencas((prev) => ({
+      ...prev,
+      [secId]: {
+        ...prev[secId],
+        tipo,
+      },
+    }));
+  };
+  
+  return (
+    <Card className="shadow-elegant-md">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Edit className="h-5 w-5" />
+          Registro de Presença
+        </CardTitle>
+        <CardDescription>
+          Registre ou edite a presença das secretarias em cada reunião
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Seletor de Reunião */}
+        <div className="space-y-2">
+          <Label htmlFor="reuniao-select">Selecione a Reunião</Label>
+          <Select
+            value={reuniaoSelecionada?.toString() || ""}
+            onValueChange={(value) => setReuniaoSelecionada(parseInt(value))}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Escolha uma reunião..." />
+            </SelectTrigger>
+            <SelectContent>
+              {reunioes?.map((reuniao) => (
+                <SelectItem key={reuniao.id} value={reuniao.id.toString()}>
+                  Reunião #{reuniao.numero} - {new Date(reuniao.data).toLocaleDateString('pt-BR')}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
+        {reuniaoSelecionada && (
+          <>
+            {/* Checklist de Secretarias */}
+            <div className="space-y-4">
+              <h3 className="font-medium text-sm text-muted-foreground">Marque as secretarias presentes:</h3>
+              <div className="space-y-3">
+                {secretarias?.map((sec) => (
+                  <div key={sec.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/30 transition-colors">
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        id={`sec-${sec.id}`}
+                        checked={presencas[sec.id]?.presente || false}
+                        onChange={() => togglePresenca(sec.id)}
+                        className="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
+                      />
+                      <label htmlFor={`sec-${sec.id}`} className="cursor-pointer">
+                        <div className="font-medium">{sec.sigla}</div>
+                        <div className="text-sm text-muted-foreground">{sec.nome}</div>
+                      </label>
+                    </div>
+                    
+                    {presencas[sec.id]?.presente && (
+                      <Select
+                        value={presencas[sec.id]?.tipo || 'titular'}
+                        onValueChange={(value) => setTipo(sec.id, value as 'titular' | 'suplente')}
+                      >
+                        <SelectTrigger className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="titular">Titular</SelectItem>
+                          <SelectItem value="suplente">Suplente</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            {/* Botão Salvar */}
+            <Button 
+              onClick={handleSalvarPresencas} 
+              className="w-full" 
+              size="lg"
+              disabled={registrarPresenca.isPending}
+            >
+              <Save className="mr-2 h-4 w-4" />
+              {registrarPresenca.isPending ? "Salvando..." : "Salvar Presenças"}
+            </Button>
+          </>
+        )}
+        
+        {!reuniaoSelecionada && (
+          <div className="text-center py-12 text-muted-foreground">
+            Selecione uma reunião para registrar as presenças
+          </div>
+        )}
+      </CardContent>
+    </Card>
   );
 }

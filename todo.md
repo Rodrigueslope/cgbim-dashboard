@@ -115,3 +115,16 @@
 - [x] Criar 3ª reunião (janeiro/2025 - agendada)
 - [x] Verificar atualização dos KPIs (33.3% taxa geral, gráficos atualizados)
 - [x] Criar checkpoint com dados corretos
+
+## Interface de Edição de Presença
+- [x] Adicionar aba "Registro de Presença" na página de Administração
+- [x] Criar seletor de reunião para escolher qual reunião editar
+- [x] Criar checklist visual das 11 secretarias com checkboxes
+- [x] Adicionar seletor titular/suplente para cada secretaria
+- [x] Implementar botão "Salvar Presenças" que atualiza o banco
+- [x] Recalcular automaticamente taxa de presença após salvar (na função registerPresencas)
+- [x] Adicionar feedback visual de sucesso/erro (toast notifications)
+- [x] Criar rota tRPC presencas.register
+- [x] Criar função registerPresencas no db.ts
+- [x] Testar edição de presença e verificar atualização dos KPIs (19 testes passando)
+- [x] Criar checkpoint com interface de edição funcional
