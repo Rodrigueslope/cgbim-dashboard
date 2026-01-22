@@ -223,3 +223,9 @@
 - [x] Adicionar ambas as abas no menu de navegação
 - [x] Testar upload e download de arquivos
 - [x] Criar checkpoint com novas funcionalidades
+
+## Remover Logo "Feito com Manus"
+- [x] Localizar componente ou código que exibe o logo
+- [x] Remover o logo do código
+- [x] Testar para confirmar remoção
+- [ ] Criar checkpoint

@@ -175,3 +175,11 @@
     }
   }
 }
+/* Ocultar badge "Feito com Manus" */
+button[aria-label*="Manus"],
+button[title*="Manus"],
+a[href*="manus.im"],
+div[class*="manus-badge"],
+[class*="made-with-manus"] {
+  display: none !important;
+}
