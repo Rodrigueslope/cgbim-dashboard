@@ -10,12 +10,13 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Plus, Save, Trash2, Edit } from "lucide-react";
+import { EditReuniaoModal } from "@/components/EditReuniaoModal";
 export default function Administracao() {
   const utils = trpc.useUtils();
   
   // Estados para formulários
-  const [editandoReuniao, setEditandoReuniao] = useState<{id: number} | null>(null);
-  const [dialogEditarAberto, setDialogEditarAberto] = useState(false);
+  const [reuniaoParaEditar, setReuniaoParaEditar] = useState<any>(null);
+  const [modalEditarAberto, setModalEditarAberto] = useState(false);
   
   const [novaReuniao, setNovaReuniao] = useState({
     numero: 0,
@@ -365,16 +366,8 @@ export default function Administracao() {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          setEditandoReuniao({ id: reuniao.id });
-                          setNovaReuniao({
-                            numero: reuniao.numero,
-                            data: new Date(reuniao.data).toISOString().split('T')[0],
-                            tipo: reuniao.tipo,
-                            local: reuniao.local || "",
-                            modalidade: reuniao.modalidade,
-                            pauta: reuniao.pauta || "",
-                          });
-                          setDialogEditarAberto(true);
+                          setReuniaoParaEditar(reuniao);
+                          setModalEditarAberto(true);
                         }}
                       >
                         <Edit className="h-4 w-4" />
@@ -770,6 +763,18 @@ export default function Administracao() {
           <RegistroPresenca />
         </TabsContent>
       </Tabs>
+
+      {/* Modal de Edição de Reunião */}
+      <EditReuniaoModal
+        reuniao={reuniaoParaEditar}
+        open={modalEditarAberto}
+        onOpenChange={setModalEditarAberto}
+        onSuccess={() => {
+          setModalEditarAberto(false);
+          setReuniaoParaEditar(null);
+          utils.reunioes.list.invalidate();
+        }}
+      />
     </div>
   );
 }

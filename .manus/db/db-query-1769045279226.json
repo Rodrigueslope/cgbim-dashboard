@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE reunioes SET data = '2025-12-19', local = 'REMOTO', modalidade = 'virtual', pauta = 'Acompanhamento das ações e definição de próximos passos' WHERE id = 2;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 23YLLHbQBnPEidx.14d6f5fc1177 --database P7MB4QepvFi5RzrqeNuCag --execute UPDATE reunioes SET data = '2025-12-19', local = 'REMOTO', modalidade = 'virtual', pauta = 'Acompanhamento das ações e definição de próximos passos' WHERE id = 2;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 64
+}

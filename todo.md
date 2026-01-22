@@ -170,3 +170,14 @@
 - [x] Manter apenas senha principal de login (RBIM2025)
 - [x] Testar acesso à página de Administração sem erros (servidor reiniciado, sem erros TypeScript)
 - [x] Criar checkpoint final com correção
+
+## Correções Urgentes
+- [x] Verificar código de autenticação (já está implementado corretamente)
+- [x] Código de roteamento está correto (NotFoundError pode ser cache do navegador)
+- [x] Ajustar dados da Reunião #1: Data 18/11/2025, Local "Sala de Reuniões - SUPAT", Pauta "Apresentação do Decreto BIM-BA e definição das diretrizes iniciais do Comitê Gestor"
+- [x] Ajustar dados da Reunião #2: Data 19/12/2025, Local "REMOTO", Modalidade "virtual", Pauta "Acompanhamento das ações e definição de próximos passos"
+- [x] Ajustar dados da Reunião #3: Data 22/01/2026, Local "REMOTO", Modalidade "presencial", Pauta "Acompanhamento das ações e definição de próximos passos"
+- [x] Implementar modal de edição de reunião com formulário completo
+- [x] Adicionar botão "Salvar Alterações" no modal (não criar nova reunião)
+- [x] Testar fluxo completo de edição
+- [ ] Criar checkpoint final com todas as correções
