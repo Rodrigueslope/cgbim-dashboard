@@ -4,67 +4,64 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Lock } from "lucide-react";
+import { Shield } from "lucide-react";
 
-export default function Login() {
+interface AdminPasswordProps {
+  onSuccess: () => void;
+}
+
+export default function AdminPassword({ onSuccess }: AdminPasswordProps) {
   const [senha, setSenha] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Senha definida: "RBIM2025"
-    const senhaCorreta = "RBIM2025";
+    // Senha de administração: RBIM007
+    const senhaCorreta = "RBIM007";
 
     if (senha === senhaCorreta) {
-      // Salvar autenticação no localStorage
-      localStorage.setItem("cgbim_auth", "authenticated");
-      localStorage.setItem("cgbim_auth_time", Date.now().toString());
-      toast.success("Login realizado com sucesso!");
-      
-      // Recarregar página para aplicar autenticação
-      window.location.href = "/";
+      // Salvar autorização de admin no sessionStorage (válido apenas durante a sessão)
+      sessionStorage.setItem("cgbim_admin_auth", "authorized");
+      toast.success("Acesso autorizado!");
+      onSuccess();
     } else {
-      toast.error("Senha incorreta. Tente novamente.");
+      toast.error("Senha incorreta. Apenas membros da RBIM podem acessar.");
       setLoading(false);
       setSenha("");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-50 p-4">
+    <div className="min-h-[60vh] flex items-center justify-center p-4">
       <Card className="w-full max-w-md shadow-elegant-lg">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-32 h-32">
-            <img 
-              src="/logo-governo-bahia.png" 
-              alt="Governo da Bahia" 
-              className="w-full h-full object-contain"
-            />
+          <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+            <Shield className="h-8 w-8 text-primary" />
           </div>
           <div>
             <CardTitle className="text-2xl font-bold">
-              Painel CG BIM-BA
+              Área Administrativa
             </CardTitle>
             <CardDescription className="mt-2">
-              Acesso restrito à RBIM - Rede BIM Bahia
+              Acesso restrito à RBIM para edição de dados
             </CardDescription>
           </div>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="senha" className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
-                Senha de Acesso
+              <Label htmlFor="admin-senha" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Senha de Administração
               </Label>
               <Input
-                id="senha"
+                id="admin-senha"
                 type="password"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
-                placeholder="Digite a senha"
+                placeholder="Digite a senha administrativa"
                 required
                 autoFocus
                 className="text-center text-lg tracking-wider"
@@ -77,19 +74,15 @@ export default function Login() {
               size="lg"
               disabled={loading}
             >
-              {loading ? "Verificando..." : "Entrar"}
+              {loading ? "Verificando..." : "Acessar Administração"}
             </Button>
 
             <p className="text-xs text-center text-muted-foreground mt-4">
-              Apenas membros autorizados da RBIM podem acessar este sistema.
+              Esta área permite criar, editar e excluir dados do sistema.
             </p>
           </form>
         </CardContent>
       </Card>
-
-      <div className="fixed bottom-4 left-4 text-sm text-muted-foreground">
-        Comitê Gestor BIM-BA - Governo do Estado da Bahia
-      </div>
     </div>
   );
 }

@@ -6,14 +6,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Plus, Save, Trash2, Edit } from "lucide-react";
-
 export default function Administracao() {
   const utils = trpc.useUtils();
   
   // Estados para formulários
+  const [editandoReuniao, setEditandoReuniao] = useState<{id: number} | null>(null);
+  const [dialogEditarAberto, setDialogEditarAberto] = useState(false);
+  
   const [novaReuniao, setNovaReuniao] = useState({
     numero: 0,
     data: "",
@@ -362,7 +365,7 @@ export default function Administracao() {
                         variant="outline"
                         size="icon"
                         onClick={() => {
-                          // Preencher formulário com dados da reunião para edição
+                          setEditandoReuniao({ id: reuniao.id });
                           setNovaReuniao({
                             numero: reuniao.numero,
                             data: new Date(reuniao.data).toISOString().split('T')[0],
@@ -371,18 +374,7 @@ export default function Administracao() {
                             modalidade: reuniao.modalidade,
                             pauta: reuniao.pauta || "",
                           });
-                          // Atualizar em vez de criar
-                          const form = document.querySelector('form');
-                          if (form) {
-                            form.onsubmit = (e) => {
-                              e.preventDefault();
-                              atualizarReuniao.mutate({
-                                id: reuniao.id,
-                                ...novaReuniao,
-                              });
-                            };
-                          }
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                          setDialogEditarAberto(true);
                         }}
                       >
                         <Edit className="h-4 w-4" />
