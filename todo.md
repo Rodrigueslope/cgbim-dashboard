@@ -222,4 +222,4 @@
 - [x] Adicionar telefone: 83996297964
 - [x] Adicionar ambas as abas no menu de navegação
 - [x] Testar upload e download de arquivos
-- [ ] Criar checkpoint com novas funcionalidades
+- [x] Criar checkpoint com novas funcionalidades
