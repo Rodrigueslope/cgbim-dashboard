@@ -181,3 +181,10 @@
 - [x] Adicionar botão "Salvar Alterações" no modal (não criar nova reunião)
 - [x] Testar fluxo completo de edição
 - [ ] Criar checkpoint final com todas as correções
+
+## Exportação para GitHub
+- [x] Criar repositório privado no GitHub (Rodrigueslope/cgbim-dashboard)
+- [x] Configurar remote do GitHub
+- [x] Fazer push inicial de todo o código (149 arquivos)
+- [x] Criar README.md completo com documentação
+- [x] Verificar que o repositório está privado e acessível
