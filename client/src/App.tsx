@@ -12,6 +12,8 @@ import Acoes from "./pages/Acoes";
 import Capacitacoes from "./pages/Capacitacoes";
 import Conformidade from "./pages/Conformidade";
 import Administracao from "./pages/Administracao";
+import MaterialApoio from "./pages/MaterialApoio";
+import Informacoes from "./pages/Informacoes";
 import { useAuthSimple } from "./hooks/useAuthSimple";
 
 // Componente para proteger rotas
@@ -82,6 +84,20 @@ function Router() {
         <ProtectedRoute component={() => (
           <DashboardLayout>
             <Administracao />
+          </DashboardLayout>
+        )} />
+      )} />
+      <Route path="/material-apoio" component={() => (
+        <ProtectedRoute component={() => (
+          <DashboardLayout>
+            <MaterialApoio />
+          </DashboardLayout>
+        )} />
+      )} />
+      <Route path="/informacoes" component={() => (
+        <ProtectedRoute component={() => (
+          <DashboardLayout>
+            <Informacoes />
           </DashboardLayout>
         )} />
       )} />

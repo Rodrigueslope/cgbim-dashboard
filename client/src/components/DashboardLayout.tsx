@@ -14,7 +14,7 @@ import {
 
 import { useIsMobile } from "@/hooks/useMobile";
 import { useAuthSimple } from "@/hooks/useAuthSimple";
-import { LayoutDashboard, PanelLeft, Calendar, Target, GraduationCap, FileCheck, Settings, LogOut } from "lucide-react";
+import { LayoutDashboard, PanelLeft, Calendar, Target, GraduationCap, FileCheck, Settings, LogOut, FolderOpen, Info } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,8 @@ const menuItems = [
   { icon: GraduationCap, label: "Capacitações", path: "/capacitacoes" },
   { icon: FileCheck, label: "Conformidade", path: "/conformidade" },
   { icon: Settings, label: "Administração", path: "/administracao" },
+  { icon: FolderOpen, label: "Material de Apoio", path: "/material-apoio" },
+  { icon: Info, label: "Informações e Dúvidas", path: "/informacoes" },
 ];
 
 function LogoutButton() {

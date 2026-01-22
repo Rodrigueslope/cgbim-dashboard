@@ -10,12 +10,14 @@ import {
   capacitacoes, 
   participantesCapacitacao,
   conformidadeRegulatoria,
+  materiaisApoio,
   type Secretaria,
   type Reuniao,
   type Presenca,
   type Acao,
   type Capacitacao,
-  type ConformidadeRegulatoria
+  type ConformidadeRegulatoria,
+  type InsertMaterialApoio
 } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
@@ -357,4 +359,31 @@ export async function getFrequenciaData() {
     presencaPorSecretaria,
     evolucaoPresenca,
   };
+}
+
+// ===== Materiais de Apoio =====
+
+export async function getAllMateriaisApoio() {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(materiaisApoio).orderBy(desc(materiaisApoio.createdAt));
+}
+
+export async function getMateriaisByReuniao(reuniaoId: number) {
+  const db = await getDb();
+  if (!db) return [];
+  return await db.select().from(materiaisApoio).where(eq(materiaisApoio.reuniaoId, reuniaoId)).orderBy(desc(materiaisApoio.createdAt));
+}
+
+export async function createMaterialApoio(data: InsertMaterialApoio) {
+  const db = await getDb();
+  if (!db) return null;
+  const result = await db.insert(materiaisApoio).values(data);
+  return result;
+}
+
+export async function deleteMaterialApoio(id: number) {
+  const db = await getDb();
+  if (!db) return null;
+  return await db.delete(materiaisApoio).where(eq(materiaisApoio.id, id));
 }

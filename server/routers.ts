@@ -291,6 +291,38 @@ export const appRouter = router({
       }),
   }),
 
+  // ===== Materiais de Apoio =====
+  materiais: router({
+    list: publicProcedure.query(async () => {
+      return await db.getAllMateriaisApoio();
+    }),
+    listByReuniao: publicProcedure
+      .input(z.object({ reuniaoId: z.number() }))
+      .query(async ({ input }) => {
+        return await db.getMateriaisByReuniao(input.reuniaoId);
+      }),
+    create: publicProcedure
+      .input(z.object({
+        reuniaoId: z.number(),
+        titulo: z.string(),
+        descricao: z.string().optional(),
+        arquivoUrl: z.string(),
+        arquivoNome: z.string(),
+        tipoArquivo: z.string().optional(),
+        tamanho: z.number().optional(),
+      }))
+      .mutation(async ({ input }) => {
+        await db.createMaterialApoio(input);
+        return { success: true };
+      }),
+    delete: publicProcedure
+      .input(z.object({ id: z.number() }))
+      .mutation(async ({ input }) => {
+        await db.deleteMaterialApoio(input.id);
+        return { success: true };
+      }),
+  }),
+
   // ===== Dashboard e KPIs =====
   dashboard: router({
     kpis: publicProcedure.query(async () => {

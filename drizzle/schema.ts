@@ -163,3 +163,22 @@ export const conformidadeRegulatoria = mysqlTable("conformidade_regulatoria", {
 
 export type ConformidadeRegulatoria = typeof conformidadeRegulatoria.$inferSelect;
 export type InsertConformidadeRegulatoria = typeof conformidadeRegulatoria.$inferInsert;
+
+/**
+ * Materiais de apoio vinculados a reuniões
+ */
+export const materiaisApoio = mysqlTable("materiais_apoio", {
+  id: int("id").autoincrement().primaryKey(),
+  reuniaoId: int("reuniaoId").notNull(),
+  titulo: text("titulo").notNull(),
+  descricao: text("descricao"),
+  arquivoUrl: text("arquivoUrl").notNull(), // URL do arquivo no S3
+  arquivoNome: text("arquivoNome").notNull(), // Nome original do arquivo
+  tipoArquivo: varchar("tipoArquivo", { length: 50 }), // MIME type (application/pdf, application/msword, etc)
+  tamanho: int("tamanho"), // Tamanho em bytes
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type MaterialApoio = typeof materiaisApoio.$inferSelect;
+export type InsertMaterialApoio = typeof materiaisApoio.$inferInsert;

@@ -208,3 +208,18 @@
 - [x] Definir senha específica para administração (RBIM-ADMIN)
 - [x] Testar fluxo completo de proteção
 - [x] Criar checkpoint com novas funcionalidades
+
+## Novas Abas: Material de Apoio e Informações
+- [x] Criar tabela materiais_apoio no schema (id, reuniaoId, titulo, descricao, arquivoUrl, arquivoNome, tipoArquivo, tamanho, createdAt)
+- [x] Criar rotas tRPC para CRUD de materiais de apoio
+- [x] Implementar função de upload para S3 usando storagePut
+- [x] Criar página "Material de Apoio" com listagem por reunião
+- [x] Implementar formulário de upload de arquivos (PDF, Word)
+- [x] Adicionar seletor de reunião para vincular material
+- [x] Implementar download de arquivos
+- [x] Criar página "Informações e Dúvidas" com dados de contato
+- [x] Adicionar email: consultoriarbim@gmail.com
+- [x] Adicionar telefone: 83996297964
+- [x] Adicionar ambas as abas no menu de navegação
+- [x] Testar upload e download de arquivos
+- [ ] Criar checkpoint com novas funcionalidades
