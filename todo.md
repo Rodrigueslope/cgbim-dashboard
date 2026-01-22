@@ -228,4 +228,4 @@
 - [x] Localizar componente ou código que exibe o logo
 - [x] Remover o logo do código
 - [x] Testar para confirmar remoção
-- [ ] Criar checkpoint
+- [x] Criar checkpoint
