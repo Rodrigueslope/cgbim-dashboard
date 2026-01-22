@@ -11,12 +11,21 @@ import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { Plus, Save, Trash2, Edit } from "lucide-react";
 import { EditReuniaoModal } from "@/components/EditReuniaoModal";
+import { EditAcaoModal } from "@/components/EditAcaoModal";
 export default function Administracao() {
   const utils = trpc.useUtils();
+  
+  // Proteção por senha
+  const [senhaAutorizada, setSenhaAutorizada] = useState(false);
+  const [senhaInput, setSenhaInput] = useState("");
+  const SENHA_ADMIN = "RBIM-ADMIN";
   
   // Estados para formulários
   const [reuniaoParaEditar, setReuniaoParaEditar] = useState<any>(null);
   const [modalEditarAberto, setModalEditarAberto] = useState(false);
+  
+  const [acaoParaEditar, setAcaoParaEditar] = useState<any>(null);
+  const [modalEditarAcaoAberto, setModalEditarAcaoAberto] = useState(false);
   
   const [novaReuniao, setNovaReuniao] = useState({
     numero: 0,
@@ -220,6 +229,53 @@ export default function Administracao() {
       status: status as "agendada" | "realizada" | "cancelada" 
     });
   };
+
+  // Verificar senha antes de mostrar conteúdo
+  const handleVerificarSenha = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (senhaInput === SENHA_ADMIN) {
+      setSenhaAutorizada(true);
+      toast.success("Área administrativa desbloqueada!");
+    } else {
+      toast.error("Senha incorreta. Acesso negado.");
+      setSenhaInput("");
+    }
+  };
+
+  // Se não autenticado, mostrar tela de senha
+  if (!senhaAutorizada) {
+    return (
+      <div className="container py-8 max-w-md mx-auto">
+        <Card className="shadow-elegant-lg">
+          <CardHeader className="text-center">
+            <CardTitle className="text-2xl">Acesso Restrito</CardTitle>
+            <CardDescription>
+              Esta área é exclusiva para membros da RBIM (Rede BIM Bahia)
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleVerificarSenha} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="senha-admin">Senha de Administração</Label>
+                <Input
+                  id="senha-admin"
+                  type="password"
+                  value={senhaInput}
+                  onChange={(e) => setSenhaInput(e.target.value)}
+                  placeholder="Digite a senha RBIM"
+                  required
+                  autoFocus
+                />
+              </div>
+              <Button type="submit" className="w-full">
+                Acessar Área Administrativa
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container py-8 max-w-7xl">
@@ -559,6 +615,16 @@ export default function Administracao() {
                         </SelectContent>
                       </Select>
                       <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          setAcaoParaEditar(acao);
+                          setModalEditarAcaoAberto(true);
+                        }}
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
                         variant="destructive"
                         size="icon"
                         onClick={() => {
@@ -773,6 +839,18 @@ export default function Administracao() {
           setModalEditarAberto(false);
           setReuniaoParaEditar(null);
           utils.reunioes.list.invalidate();
+        }}
+      />
+
+      {/* Modal de Edição de Ação */}
+      <EditAcaoModal
+        acao={acaoParaEditar}
+        open={modalEditarAcaoAberto}
+        onOpenChange={setModalEditarAcaoAberto}
+        onSuccess={() => {
+          setModalEditarAcaoAberto(false);
+          setAcaoParaEditar(null);
+          utils.acoes.list.invalidate();
         }}
       />
     </div>

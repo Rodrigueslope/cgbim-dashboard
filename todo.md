@@ -188,3 +188,23 @@
 - [x] Fazer push inicial de todo o código (149 arquivos)
 - [x] Criar README.md completo com documentação
 - [x] Verificar que o repositório está privado e acessível
+
+## Deploy na Vercel
+- [ ] Criar arquivo vercel.json com configurações de build
+- [ ] Criar arquivo .vercelignore
+- [ ] Atualizar package.json com scripts de build para Vercel
+- [ ] Documentar variáveis de ambiente necessárias
+- [ ] Criar guia de deploy no README
+- [ ] Fazer commit e push das configurações
+- [ ] Conectar repositório GitHub à Vercel
+
+## Modal de Edição de Ações e Proteção da Aba Administração
+- [x] Criar componente EditAcaoModal similar ao EditReuniaoModal
+- [x] Adicionar botão de editar nas ações cadastradas
+- [x] Integrar modal de edição na página Administração
+- [x] Testar edição de ações (salvar alterações sem criar duplicatas)
+- [x] Implementar proteção por senha na aba Administração
+- [x] Criar prompt de senha ao acessar a aba Administração
+- [x] Definir senha específica para administração (RBIM-ADMIN)
+- [x] Testar fluxo completo de proteção
+- [ ] Criar checkpoint com novas funcionalidades
