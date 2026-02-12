@@ -4,17 +4,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// Configuração para PostgreSQL (Render)
+// Configuração com SSL obrigatório para o Render PostgreSQL
 const connectionString = process.env.DATABASE_URL;
-const client = postgres(connectionString);
+const client = postgres(connectionString, { ssl: 'require' }); 
 const db = drizzle(client);
 
 async function seed() {
-  console.log("🌱 Iniciando seed do banco de dados PostgreSQL...");
+  console.log("🌱 Iniciando seed do banco de dados PostgreSQL (RBIM)...");
 
   try {
-    // Inserir secretarias
-    // Removidos os backticks (`) que são do MySQL para garantir compatibilidade com Postgres
+    // 1. Inserir secretarias
     await db.execute(`INSERT INTO secretarias (sigla, nome, ordem, titularNome, titularEmail, suplenteNome, suplenteEmail) VALUES 
       ('SAEB', 'Secretaria de Administração', 1, 'Hemerson Cardoso Guimarães', 'hemerson.guimaraes@saeb.ba.gov.br', 'Marcia Hlavnicka', 'marcia.hlavnicka@saeb.ba.gov.br'),
       ('CASA CIVIL', 'Casa Civil', 2, 'Armindo Miranda', 'armindo.miranda@casacivil.ba.gov.br', 'Cézar Wagner Vianna da Silva', 'cezar.silva@casacivil.ba.gov.br'),
@@ -30,13 +29,13 @@ async function seed() {
     `);
     console.log("✅ Secretarias inseridas");
 
-    // Inserir primeira reunião
+    // 2. Inserir primeira reunião
     await db.execute(`INSERT INTO reunioes (numero, data, tipo, local, modalidade, pauta, quorumAtingido, totalPresentes, totalEsperado, taxaPresenca) VALUES 
       (1, '2025-01-15', 'ordinaria', 'Salvador - BA', 'presencial', 'Instalação do CGBIM-BAHIA e apresentação da Estratégia BIM-BA', 1, 10, 11, 90.91)
     `);
     console.log("✅ Primeira reunião inserida");
 
-    // Inserir presenças
+    // 3. Inserir presenças
     await db.execute(`INSERT INTO presencas (reuniaoId, secretariaId, presente, tipoParticipante) VALUES 
       (1, 1, 1, 'titular'), (1, 2, 1, 'titular'), (1, 3, 0, 'titular'), (1, 4, 1, 'titular'),
       (1, 5, 1, 'titular'), (1, 6, 1, 'titular'), (1, 7, 1, 'titular'), (1, 8, 1, 'titular'),
@@ -44,15 +43,15 @@ async function seed() {
     `);
     console.log("✅ Presenças inseridas");
 
-    // Inserir capacitações
+    // 4. Inserir capacitações
     await db.execute(`INSERT INTO capacitacoes (titulo, descricao, data, local, modalidade, instrutor, cargaHoraria, participantesEsperados, participantesConfirmados, participantesPresentes, taxaPresenca, status) VALUES 
       ('Introdução ao BIM - Conceitos Fundamentais', 'Capacitação básica sobre Building Information Modeling para servidores estaduais', '2025-02-20', 'Salvador - BA', 'presencial', 'Especialista Externo', 8, 50, 45, 42, 93.33, 'realizada')
     `);
-    console.log("✅ Capacitação inserida");
+    console.log("✅ Capacitações inseridas");
 
-    console.log("🎉 Banco de dados populado com sucesso!");
+    console.log("🎉 Seed concluído com sucesso para o Painel CG BIM-BA!");
   } catch (error) {
-    console.error("❌ Erro ao inserir dados:", error);
+    console.error("❌ Erro ao inserir dados no PostgreSQL:", error);
   } finally {
     await client.end();
     process.exit(0);
