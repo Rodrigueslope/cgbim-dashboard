@@ -27,7 +27,7 @@ export async function getUserByOpenId(openId: string) {
   return result[0];
 }
 
-// ===== Secretarias (ESSENCIAL PARA OS GRÁFICOS) =====
+// ===== Secretarias =====
 export async function getAllSecretarias(): Promise<Secretaria[]> {
   return db.select().from(secretarias).orderBy(secretarias.ordem);
 }
@@ -127,4 +127,4 @@ export async function getKPIs() {
 export async function getFrequenciaData() {
   const evolucao = await db.select({ data: reunioes.data, taxaPresenca: reunioes.taxaPresenca }).from(reunioes).orderBy(reunioes.data);
   return { presencaPorSecretaria: [], evolucaoPresenca: evolucao };
-}}
+}
