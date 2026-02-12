@@ -1,124 +1,141 @@
 import { eq, desc, and, sql, gte, lte } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/postgres-js"; // Trocado de mysql2 para postgres-js
-import postgres from "postgres"; // Driver do PostgreSQL
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import { 
-  InsertUser, 
-  users, 
-  secretarias, 
-  reunioes, 
-  presencas, 
-  acoes, 
-  capacitacoes, 
-  participantesCapacitacao,
-  conformidadeRegulatoria,
-  materiaisApoio,
-  type Secretaria,
-  type Reuniao,
-  type Presenca,
-  type Acao,
-  type Capacitacao,
-  type ConformidadeRegulatoria,
-  type InsertMaterialApoio
+  InsertUser, users, secretarias, reunioes, presencas, acoes, 
+  capacitacoes, participantesCapacitacao, conformidadeRegulatoria,
+  materiaisApoio, type Secretaria, type Reuniao, type Presenca, 
+  type Acao, type Capacitacao, type ConformidadeRegulatoria, type InsertMaterialApoio
 } from "../drizzle/schema";
 
-// Configuração da conexão com SSL obrigatório para o Render
 const connectionString = process.env.DATABASE_URL;
-
-if (!connectionString) {
-  throw new Error("DATABASE_URL is missing");
-}
+if (!connectionString) throw new Error("DATABASE_URL is missing");
 
 const client = postgres(connectionString, { ssl: 'require' });
 export const db = drizzle(client);
 
-// ===== Funções Adaptadas para PostgreSQL =====
+// Funções auxiliares para o tRPC/Rotas funcionarem
+export async function getDb() { return db; }
 
+// ===== Usuários (Upsert para Postgres) =====
 export async function upsertUser(user: InsertUser): Promise<void> {
-  if (!user.openId) return;
-  
-  // No PostgreSQL usamos onConflictDoUpdate em vez de onDuplicateKeyUpdate
+  if (!user.openId) throw new Error("User openId is required");
   await db.insert(users).values(user).onConflictDoUpdate({
     target: users.openId,
-    set: {
-      name: user.name,
-      email: user.email,
-      lastSignedIn: new Date(),
-      role: user.role
-    }
+    set: { name: user.name, email: user.email, lastSignedIn: new Date(), role: user.role }
   });
 }
 
 export async function getUserByOpenId(openId: string) {
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
-  return result.length > 0 ? result[0] : undefined;
+  return result[0];
 }
 
 // ===== Secretarias =====
 export async function getAllSecretarias(): Promise<Secretaria[]> {
   return db.select().from(secretarias).orderBy(secretarias.ordem);
 }
-
-// ===== Reuniões =====
-export async function createReuniao(data: typeof reunioes.$inferInsert): Promise<number> {
-  // No Postgres usamos .returning() para pegar o ID inserido
-  const result = await db.insert(reunioes).values(data).returning({ id: reunioes.id });
-  return result[0].id;
+export async function getSecretariaById(id: number) {
+  const result = await db.select().from(secretarias).where(eq(secretarias.id, id)).limit(1);
+  return result[0];
 }
 
+// ===== Reuniões (Corrigido insertId para Postgres) =====
 export async function getAllReunioes(): Promise<Reuniao[]> {
   return db.select().from(reunioes).orderBy(desc(reunioes.data));
 }
-
-export async function registerPresencas(
-  reuniaoId: number,
-  presencasData: Array<{ secretariaId: number; presente: boolean; tipoParticipante: 'titular' | 'suplente' }>
-): Promise<void> {
-  await db.delete(presencas).where(eq(presencas.reuniaoId, reuniaoId));
-  
-  if (presencasData.length > 0) {
-    await db.insert(presencas).values(
-      presencasData.map((p) => ({
-        reuniaoId,
-        secretariaId: p.secretariaId,
-        presente: p.presente ? 1 : 0, // Ajuste para garantir 1/0 se o schema for int
-        tipoParticipante: p.tipoParticipante,
-      }))
-    );
-  }
-  
-  const totalPresentes = presencasData.filter((p) => p.presente).length;
-  const taxa = ((totalPresentes / 11) * 100).toFixed(2);
-  
-  await db.update(reunioes).set({
-    totalPresentes,
-    taxaPresenca: taxa,
-    quorumAtingido: totalPresentes >= 6 ? 1 : 0,
-  }).where(eq(reunioes.id, reuniaoId));
+export async function getReuniaoById(id: number) {
+  const result = await db.select().from(reunioes).where(eq(reunioes.id, id)).limit(1);
+  return result[0];
+}
+export async function createReuniao(data: any): Promise<number> {
+  const result = await db.insert(reunioes).values(data).returning({ id: reunioes.id });
+  return result[0].id;
+}
+export async function updateReuniao(id: number, data: any): Promise<void> {
+  await db.update(reunioes).set(data).where(eq(reunioes.id, id));
+}
+export async function deleteReuniao(id: number): Promise<void> {
+  await db.delete(presencas).where(eq(presencas.reuniaoId, id));
+  await db.delete(reunioes).where(eq(reunioes.id, id));
 }
 
-// ===== Outras funções mantêm a lógica similar =====
+// ===== Presenças =====
+export async function registerPresencas(reuniaoId: number, presencasData: any[]): Promise<void> {
+  await db.delete(presencas).where(eq(presencas.reuniaoId, reuniaoId));
+  if (presencasData.length > 0) {
+    await db.insert(presencas).values(presencasData.map(p => ({ ...p, reuniaoId })));
+  }
+}
+export async function getPresencasByReuniaoId(reuniaoId: number) {
+  return db.select().from(presencas).where(eq(presencas.reuniaoId, reuniaoId));
+}
+
+// ===== Ações =====
 export async function getAllAcoes(): Promise<Acao[]> {
   return db.select().from(acoes).orderBy(desc(acoes.dataPrevista));
 }
+export async function createAcao(data: any) {
+  const result = await db.insert(acoes).values(data).returning({ id: acoes.id });
+  return result[0].id;
+}
+export async function updateAcao(id: number, data: any) {
+  await db.update(acoes).set(data).where(eq(acoes.id, id));
+}
+export async function deleteAcao(id: number) {
+  await db.delete(acoes).where(eq(acoes.id, id));
+}
 
+// ===== Capacitações =====
+export async function getAllCapacitacoes(): Promise<Capacitacao[]> {
+  return db.select().from(capacitacoes).orderBy(desc(capacitacoes.data));
+}
+export async function createCapacitacao(data: any) {
+  const result = await db.insert(capacitacoes).values(data).returning({ id: capacitacoes.id });
+  return result[0].id;
+}
+export async function updateCapacitacao(id: number, data: any) {
+  await db.update(capacitacoes).set(data).where(eq(capacitacoes.id, id));
+}
+export async function deleteCapacitacao(id: number) {
+  await db.delete(capacitacoes).where(eq(capacitacoes.id, id));
+}
+
+// ===== Conformidade Regulatória =====
+export async function getAllConformidade() {
+  return db.select().from(conformidadeRegulatoria);
+}
+export async function updateConformidade(id: number, data: any) {
+  await db.update(conformidadeRegulatoria).set(data).where(eq(conformidadeRegulatoria.id, id));
+}
+
+// ===== KPIs e Estatísticas =====
 export async function getKPIs() {
-  const reunioesData = await db.select().from(reunioes);
-  const taxaPresencaGeral = reunioesData.length > 0 
-    ? reunioesData.reduce((acc, r) => acc + Number(r.taxaPresenca), 0) / reunioesData.length 
-    : 0;
-
-  const acoesEm = await db.select().from(acoes).where(eq(acoes.status, 'em_progresso'));
-  const caps = await db.select().from(capacitacoes).where(eq(capacitacoes.status, 'realizada'));
-
+  const re = await db.select().from(reunioes);
+  const ac = await db.select().from(acoes).where(eq(acoes.status, 'em_progresso'));
+  const ca = await db.select().from(capacitacoes).where(eq(capacitacoes.status, 'realizada'));
+  const co = await db.select().from(conformidadeRegulatoria);
+  
   return {
-    taxaPresencaGeral: Number(taxaPresencaGeral.toFixed(2)),
-    acoesEmAndamento: acoesEm.length,
-    capacitacoesRealizadas: caps.length,
-    statusGeralEstrategia: 18, // Valor estático para teste igual ao Manus
+    taxaPresencaGeral: re.length > 0 ? re.reduce((a, b) => a + Number(b.taxaPresenca), 0) / re.length : 0,
+    acoesEmAndamento: ac.length,
+    capacitacoesRealizadas: ca.length,
+    statusGeralEstrategia: co.length > 0 ? co.reduce((a, b) => a + (b.percentualConclusao || 0), 0) / co.length : 0,
   };
 }
 
-// Funções de Materiais de Apoio
+export async function getFrequenciaData() {
+  const evolucao = await db.select({ data: reunioes.data, taxaPresenca: reunioes.taxaPresenca }).from(reunioes).orderBy(reunioes.data);
+  return { presencaPorSecretaria: [], evolucaoPresenca: evolucao };
+}
+
+// ===== Materiais de Apoio =====
 export async function getAllMateriaisApoio() {
-  return await db.select().from(materiaisApoio).orderBy(desc(materiaisApoio.createdAt));
+  return db.select().from(materiaisApoio).orderBy(desc(materiaisApoio.createdAt));
+}
+export async function createMaterialApoio(data: InsertMaterialApoio) {
+  return db.insert(materiaisApoio).values(data).returning();
+}
+export async function deleteMaterialApoio(id: number) {
+  await db.delete(materiaisApoio).where(eq(materiaisApoio.id, id));
 }
